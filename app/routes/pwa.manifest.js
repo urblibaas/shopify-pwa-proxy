@@ -12,12 +12,12 @@ export async function loader() {
     theme_color: "#000000",
     icons: [
       {
-        src: "https://vercel.app", // Replace with your live icon links
+        src: "https://shopify-pwa-proxy.vercel.app", // Replace with actual icon URL
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "https://vercel.app", // Replace with your live icon links
+        src: "https://shopify-pwa-proxy.vercel.app",
         sizes: "512x512",
         type: "image/png",
       },
