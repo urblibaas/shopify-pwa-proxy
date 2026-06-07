@@ -1,5 +1,4 @@
 // File: app/routes/pwa.manifest.js
-import { json } from "@react-router/node";
 
 // This route is public — browsers fetch the manifest without a Shopify session
 export const unauthenticated = true;
@@ -56,7 +55,7 @@ export async function loader({ request }) {
     ],
   };
 
-  return json(manifestData, {
+  return new Response(JSON.stringify(manifestData), {
     headers: {
       "Content-Type": "application/manifest+json",
       "Cache-Control": "public, max-age=300",
