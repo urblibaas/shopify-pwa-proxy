@@ -25,3 +25,8 @@ scopes = ""
 
 [auth]
 redirect_urls = [ "https://shopify-pwa-proxy.vercel.app/api/auth" ]
+
+[app_proxy]
+url = "https://shopify-pwa-proxy.vercel.app"
+sub_path = "pwa"
+prefix = "apps"
