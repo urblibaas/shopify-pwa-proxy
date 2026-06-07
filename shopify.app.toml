@@ -21,12 +21,12 @@ api_version = "2026-07"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = ""
+scopes = "write_app_proxy"
 
 [auth]
 redirect_urls = [ "https://shopify-pwa-proxy.vercel.app/api/auth" ]
 
 [app_proxy]
-url = "https://shopify-pwa-proxy.vercel.app"
-sub_path = "pwa"
+url = "/pwa"
+subpath = "pwa"
 prefix = "apps"
