@@ -12,9 +12,10 @@ const shopify = shopifyApp({
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
   apiVersion: ApiVersion.October25,
   scopes: (process.env.SCOPES || process.env.scopes || "")?.split(","),
-  appUrl:
-    process.env.SHOPIFY_APP_URL ||
-    "https://shopify-pwa-proxy.vercel.app",
+  appUrl: (() => {
+    const raw = process.env.SHOPIFY_APP_URL || "https://shopify-pwa-proxy.vercel.app";
+    return /^https?:\/\//.test(raw) ? raw : `https://${raw}`;
+  })(),
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
