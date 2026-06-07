@@ -28,8 +28,9 @@ export async function loader({ request }) {
   const colors = isDark ? darkColors : lightColors;
 
   // ── Icon URLs (dynamic SVG icons from pwa.icon.js) ──────────────
+  // Browser fetches these directly from Vercel, so path is /pwa/icon (not /apps/pwa/)
   const iconBase =
-    "https://shopify-pwa-proxy.vercel.app/apps/pwa/icon";
+    "https://shopify-pwa-proxy.vercel.app/pwa/icon";
 
   const manifestData = {
     name: "Urb Lihaas Premium Store",
