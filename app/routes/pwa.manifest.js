@@ -27,32 +27,38 @@ export async function loader({ request }) {
   };
   const colors = isDark ? darkColors : lightColors;
 
-  // ── Icon URLs (dynamic SVG icons from pwa.icon.js) ──────────────
-  // Browser fetches these directly from Vercel, so path is /pwa/icon (not /apps/pwa/)
-  const iconBase =
-    "https://shopify-pwa-proxy.vercel.app/pwa/icon";
+  // ── Icons ──────────────────────────────────────────────────────
+  // Use uploaded JPG/PNG icons from theme settings if provided,
+  // otherwise fall back to the dynamic SVG icon generator.
+  const customIconLight = url.searchParams.get("icon_light");
+  const customIconDark = url.searchParams.get("icon_dark");
+  const customIcon = isDark
+    ? customIconDark || customIconLight
+    : customIconLight || customIconDark;
+  const svgIconBase = "https://shopify-pwa-proxy.vercel.app/pwa/icon";
+
+  const iconSrc = customIcon
+    ? customIcon // Use the merchant's uploaded JPG/PNG icon
+    : `${svgIconBase}?theme=${theme}&size=512`;
+  const iconType = customIcon
+    ? "image/jpeg" // Shopify CDN returns JPEG/PNG based on source
+    : "image/svg+xml";
 
   const manifestData = {
-    name: "Urb Lihaas Premium Store",
-    short_name: "Urb Lihaas",
+    name: "Urb Libaas",
+    short_name: "Urb Libaas",
     description: "Modern Apparel and Streetwear",
     start_url: "/",
     scope: "/",
-    display: "standalone", // "standalone" is the modern, well-supported value
+    display: "standalone",
     background_color: colors.background_color,
     theme_color: colors.theme_color,
     icons: [
       {
-        src: `${iconBase}?theme=${theme}&size=192`,
-        sizes: "192x192",
-        type: "image/svg+xml", // MUST match the Content-Type returned by pwa.icon.js
-        purpose: "any",
-      },
-      {
-        src: `${iconBase}?theme=${theme}&size=512`,
+        src: iconSrc,
         sizes: "512x512",
-        type: "image/svg+xml",
-        purpose: "any",
+        type: iconType,
+        purpose: "any maskable",
       },
     ],
   };
