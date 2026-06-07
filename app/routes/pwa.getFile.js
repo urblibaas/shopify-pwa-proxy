@@ -35,7 +35,7 @@ export async function loader() {
       "Content-Type": "application/javascript; charset=utf-8",
       "Cache-Control": "public, max-age=3600",
       // Allows the SW to control paths outside its own directory.
-      // This is essential because the SW is served from /apps/pwa-proxy-1/pwa/
+      // This SW is served from /apps/pwa-proxy-1/pwa/getFile on the storefront
       // but needs to control the storefront root /.
       "Service-Worker-Allowed": "/",
     },

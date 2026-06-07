@@ -29,7 +29,7 @@ export async function loader({ request }) {
 
   // ── Icon URLs (dynamic SVG icons from pwa.icon.js) ──────────────
   const iconBase =
-    "https://shopify-pwa-proxy.vercel.app/apps/pwa-proxy-1/pwa/icon";
+    "https://shopify-pwa-proxy.vercel.app/apps/pwa/icon";
 
   const manifestData = {
     name: "Urb Lihaas Premium Store",
