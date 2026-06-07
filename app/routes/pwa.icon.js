@@ -4,7 +4,9 @@
 // Called as: /pwa/icon?theme=dark|light&size=192|512
 //
 // Returns an SVG icon that works in Chrome/Edge/Android manifests.
-// For iOS (apple-touch-icon) you'll want a PNG — see notes at the bottom.
+
+// This route is public — the browser fetches icons without a Shopify session
+export const unauthenticated = true;
 
 export async function loader({ request }) {
   const url = new URL(request.url);
