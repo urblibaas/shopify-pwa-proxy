@@ -28,7 +28,8 @@ export async function loader({ request }) {
   const colors = isDark ? darkColors : lightColors;
 
   // ── Icon URLs (dynamic SVG icons from pwa.icon.js) ──────────────
-  const iconBase = "https://shopify-pwa-proxy.vercel.app/apps/pwa-proxy-1/pwa/icon";
+  const iconBase =
+    "https://shopify-pwa-proxy.vercel.app/apps/pwa-proxy-1/pwa/icon";
 
   const manifestData = {
     name: "Urb Lihaas Premium Store",
@@ -36,14 +37,14 @@ export async function loader({ request }) {
     description: "Modern Apparel and Streetwear",
     start_url: "/",
     scope: "/",
-    display: "standalone",       // "standalone" is the modern, well-supported value
+    display: "standalone", // "standalone" is the modern, well-supported value
     background_color: colors.background_color,
     theme_color: colors.theme_color,
     icons: [
       {
         src: `${iconBase}?theme=${theme}&size=192`,
         sizes: "192x192",
-        type: "image/svg+xml",   // MUST match the Content-Type returned by pwa.icon.js
+        type: "image/svg+xml", // MUST match the Content-Type returned by pwa.icon.js
         purpose: "any",
       },
       {
