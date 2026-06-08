@@ -28,13 +28,9 @@ export async function loader({ request }) {
   const colors = isDark ? darkColors : lightColors;
 
   // ── Icons ──────────────────────────────────────────────────────
-  // Use uploaded JPG/PNG icons from theme settings if provided,
+  // Use the uploaded JPG/PNG icon from theme settings if provided,
   // otherwise fall back to the dynamic SVG icon generator.
-  const customIconLight = url.searchParams.get("icon_light");
-  const customIconDark = url.searchParams.get("icon_dark");
-  const customIcon = isDark
-    ? customIconDark || customIconLight
-    : customIconLight || customIconDark;
+  const customIcon = url.searchParams.get("icon");
   const svgIconBase = "https://shopify-pwa-proxy.vercel.app/pwa/icon";
 
   const iconSrc = customIcon
