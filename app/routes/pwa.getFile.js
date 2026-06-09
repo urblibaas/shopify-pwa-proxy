@@ -36,6 +36,7 @@ export async function loader() {
     });
 
     // ── Cache-first for navigation, network-first for everything else ──
+    // Use navigation preload + cache-first for navigations so the app launch is instant.
     self.addEventListener('fetch', (event) => {
       const { request } = event;
       const url = new URL(request.url);
@@ -43,24 +44,41 @@ export async function loader() {
       // Only handle same-origin GET requests
       if (request.method !== 'GET' || url.origin !== self.location.origin) return;
 
-      // Navigation requests (PWA launch): cache-first for instant load
+      // Navigation requests (PWA launch): prefer navigation preload -> cached -> network
       if (request.mode === 'navigate') {
-        event.respondWith(
-          caches.open(CACHE_NAME).then((cache) => {
-            return cache.match(request).then((cached) => {
-              // Return cached page immediately, then update cache in background
-              const fetchPromise = fetch(request).then((networkResponse) => {
-                if (networkResponse && networkResponse.status === 200) {
-                  cache.put(request, networkResponse.clone());
-                }
-                return networkResponse;
-              }).catch(() => {
-                // Offline — cached version already returned above
-              });
-              return cached || fetchPromise;
-            });
-          })
-        );
+        event.respondWith((async () => {
+          const cache = await caches.open(CACHE_NAME);
+          // If navigation preload provided a response while SW booted, use it
+          try {
+            const preloadResponse = await event.preloadResponse;
+            if (preloadResponse) return preloadResponse;
+          } catch (e) {
+            // ignore
+          }
+
+          const cached = await cache.match(request);
+          if (cached) {
+            // Kick off an update in the background
+            fetch(request).then((networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                cache.put(request, networkResponse.clone());
+              }
+            }).catch(() => {});
+            return cached;
+          }
+
+          // No cached page and no preload -> try network
+          try {
+            const networkResponse = await fetch(request);
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+          } catch (err) {
+            // Offline and nothing cached
+            return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+          }
+        })());
         return;
       }
 
@@ -79,7 +97,7 @@ export async function loader() {
                   cache.put(request, networkResponse.clone());
                 }
                 return networkResponse;
-              });
+              }).catch(() => {});
               return cached || fetchPromise;
             });
           })
